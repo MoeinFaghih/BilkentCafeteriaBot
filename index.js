@@ -14,6 +14,7 @@ const bot = new Telegraf(botToken) ;
 
 const sendMessage = async (message) => {
     await bot.telegram.sendMessage(110623824, message);
+    await bot.telegram.sendMessage(982984212, message);
     console.log('Message sent');
   };
 
