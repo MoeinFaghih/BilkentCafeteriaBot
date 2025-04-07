@@ -9,13 +9,15 @@ dotenv.config() ;
 
 var mealData = []
 
-const botToken = process.env.BOT_TOKEN;
+const botToken = process.env.BOT_TOKEN ;
 const bot = new Telegraf(botToken) ;
 
+const chatIdArray = process.env.CHAT_IDS.split(',') ;
+
 const sendMessage = async (message) => {
-    await bot.telegram.sendMessage(110623824, message);
-    await bot.telegram.sendMessage(982984212, message);
-    await bot.telegram.sendMessage(33851026, message);
+    for(const id of chatIdArray)
+        await bot.telegram.sendMessage(Number(id), message);
+    
     console.log('Message sent');
   };
 

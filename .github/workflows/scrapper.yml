@@ -25,4 +25,5 @@ jobs:
     - name: Run the scraper
       env:
         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        CHAT_IDS: ${{ secrets.CHAT_IDS }}
       run: node index.js
