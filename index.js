@@ -4,6 +4,8 @@ import { parse, startOfDay } from 'date-fns';
 import iconv from "iconv-lite";
 import { Telegraf } from 'telegraf';
 import dotenv from 'dotenv';
+import pkg from 'pg';
+const { Pool } = pkg;
 
 dotenv.config() ;
 
@@ -12,7 +14,25 @@ var mealData = []
 const botToken = process.env.BOT_TOKEN ;
 const bot = new Telegraf(botToken) ;
 
-const chatIdArray = process.env.CHAT_IDS.split(',') ;
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false },
+});
+
+//const chatIdArray = process.env.CHAT_IDS.split(',') ;
+const chatIdArray = [] ;
+
+try {
+    const dbResponse = await pool.query('select * from ids') ;
+    const rows = dbResponse.rows ;
+
+    for(const row of rows)
+        chatIdArray.push(Number(row.id)) ;
+} catch (error) {
+    console.log("There was an error connectiong to the db", error.message);
+}finally{
+    await pool.end() ;
+}
 
 const sendMessage = async (message) => {
     for(const id of chatIdArray)
